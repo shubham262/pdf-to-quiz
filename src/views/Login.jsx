@@ -1,9 +1,40 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 "use client";
+import { authClient } from "@/config/auth";
 import { Button, Input } from "antd";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useCallback, useState } from "react";
 
 const Login = () => {
+	const router = useRouter();
+	const [info, setInfo] = useState({
+		email: "",
+		password: "",
+	});
+
+	const handleOnChange = useCallback((key, value) => {
+		setInfo((prev) => ({ ...prev, [key]: value }));
+	}, []);
+
+	const handlSubmit = useCallback(async () => {
+		try {
+			if (!info?.email || !info?.password) {
+				return message.error("Please enter email and password");
+			}
+			const payload = {
+				email: info?.email,
+				password: info?.password,
+			};
+			const { data } = await authClient.signIn.email(payload);
+			const { user } = data;
+			localStorage.setItem("user", JSON.stringify(user));
+			return router.push("/");
+		} catch (error) {
+			console.log("error==>handlSubmit", error);
+			message.error("Something went wrong");
+		}
+	}, [info?.email, info?.password, router]);
 	return (
 		<div className="min-h-screen min-w-screen w-full flex items-center justify-center bg-blue-100 px-6 py-12">
 			<div className="max-w-5xl bg-white w-full rounded-3xl  border border-blue-100 p-6 lg:p-12 flex flex-col lg:flex-row gap-10 justify-between lg:items-center">
@@ -46,6 +77,8 @@ const Login = () => {
 									size="large"
 									type="email"
 									placeholder="you@example.com"
+									value={info?.email}
+									onChange={(e) => handleOnChange("email", e.target.value)}
 								/>
 							</div>
 
@@ -60,10 +93,18 @@ const Login = () => {
 									id="signup-password"
 									size="large"
 									placeholder="Create a password"
+									value={info?.password}
+									onChange={(e) => handleOnChange("password", e.target.value)}
 								/>
 							</div>
 
-							<Button  type="primary" size="large" block className="mt-2">
+							<Button
+								type="primary"
+								size="large"
+								block
+								className="mt-2"
+								onClick={handlSubmit}
+							>
 								Sign In
 							</Button>
 						</div>

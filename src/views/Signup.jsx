@@ -3,9 +3,12 @@
 import { authClient } from "@/config/auth";
 import { Button, Input, message } from "antd";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import React, { useCallback, useState } from "react";
 
 const Signup = () => {
+	const router = useRouter();
 	const [info, setInfo] = useState({
 		email: "",
 		password: "",
@@ -26,12 +29,15 @@ const Signup = () => {
 				password: info?.password,
 				name: info?.name,
 			};
-			const response = await authClient.signUp.email(payload);
+			const { data } = await authClient.signUp.email(payload);
+			const { user } = data;
+			localStorage.setItem("user", JSON.stringify(user));
+			return router.push("/");
 		} catch (error) {
 			console.log("error==>handlSubmit", error);
 			message.error("Something went wrong");
 		}
-	}, [info?.email, info?.password, info?.name]);
+	}, [info?.email, info?.password, info?.name, router]);
 
 	return (
 		<div className="min-h-screen min-w-screen w-full flex items-center justify-center bg-blue-100 px-6 py-12">
