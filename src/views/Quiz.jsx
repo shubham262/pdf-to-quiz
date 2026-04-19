@@ -74,8 +74,8 @@ const Quiz = () => {
 			const payload = {
 				userResponse: info?.answer,
 			};
-			const response = await saveQuiz(id, payload);
-			// router.back();
+			await saveQuiz(id, payload);
+			return router.replace(`/results/${id}`);
 		} catch (error) {
 			console.log("errror==>fetchDetails", error);
 			message.error("Something went wrong, try again");
