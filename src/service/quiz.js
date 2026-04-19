@@ -17,3 +17,15 @@ export const fetchQuizx = async (id) => {
 		throw error;
 	}
 };
+
+export const saveQuiz = async (id, payload) => {
+	try {
+		const { data } = await api.post(
+			`/api/quiz/save-quiz-information/${id}`,
+			payload
+		);
+		return data;
+	} catch (error) {
+		throw error;
+	}
+};
