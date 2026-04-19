@@ -8,3 +8,12 @@ export const generateQuiz = async (paload) => {
 		throw error;
 	}
 };
+
+export const fetchQuizx = async (id) => {
+	try {
+		const { data } = await api.get(`/api/quiz/fetch-quiz-information/${id}`);
+		return data;
+	} catch (error) {
+		throw error;
+	}
+};

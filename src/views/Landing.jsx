@@ -29,24 +29,27 @@ const Landing = () => {
 		});
 	};
 
-	const handleFileUpload = useCallback(async (e) => {
-		try {
-			const file = e.target.files?.[0];
-			console.log("file", file);
-			const base64 = await fileToBase64(file);
-			const payload = {
-				file: base64,
-			};
-			setInfo((prev) => ({ ...prev, loading: true }));
-			const response = await generateQuiz(payload);
+	const handleFileUpload = useCallback(
+		async (e) => {
+			try {
+				const file = e.target.files?.[0];
 
-			console.log("file", response);
-		} catch (error) {
-			message.error("Something went wrong");
-		} finally {
-			setInfo((prev) => ({ ...prev, loading: false }));
-		}
-	}, []);
+				const base64 = await fileToBase64(file);
+				const payload = {
+					file: base64,
+				};
+				setInfo((prev) => ({ ...prev, loading: true }));
+				const { data } = await generateQuiz(payload);
+				const quizId = data?._id;
+				return router.push(`/quiz/${quizId}`);
+			} catch (error) {
+				message.error("Something went wrong");
+			} finally {
+				setInfo((prev) => ({ ...prev, loading: false }));
+			}
+		},
+		[router]
+	);
 	return (
 		<div className="min-h-screen min-w-screen w-full flex items-center justify-center bg-blue-100 px-6 py-12">
 			<div className="max-w-5xl bg-white w-full rounded-3xl  border border-blue-100 p-6 lg:p-12 flex flex-col lg:flex-row gap-10 justify-between lg:items-center">
