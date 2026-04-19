@@ -127,3 +127,59 @@ const Login = () => {
 };
 
 export default Login;
+
+// question.options.map((option, index) => {
+// 	const isSelected = selected === index;
+// 	return (
+// 		<button
+// 			key={index}
+// 			onClick={() => handleSelect(index)}
+// 			className={`w-full text-left flex items-center gap-4 rounded-2xl border px-5 py-4 transition-all cursor-pointer
+// 										${
+// 											isSelected
+// 												? "border-blue-600 bg-blue-50 text-blue-700"
+// 												: "border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-slate-50"
+// 										}`}
+// 		>
+// 			<div
+// 				className={`w-6 h-6 shrink-0 rounded-full border-2 flex items-center justify-center transition-all
+// 											${isSelected ? "border-blue-600 bg-blue-600" : "border-slate-300"}`}
+// 			>
+// 				{isSelected && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
+// 			</div>
+// 			<span className="text-sm font-medium">{option}</span>
+// 			{isSelected && (
+// 				<CheckCircle2 size={18} className="ml-auto text-blue-600 shrink-0" />
+// 			)}
+// 		</button>
+// 	);
+// });
+
+// <div className="flex items-center justify-between gap-4">
+// 	<Button
+// 		size="large"
+// 		icon={<ArrowLeft size={16} />}
+// 		onClick={handleBack}
+// 	>
+// 		{current === 0 ? "Go Back" : "Previous"}
+// 	</Button>
+// 	{isLast ? (
+// 		<Button
+// 			type="primary"
+// 			size="large"
+// 			disabled={selected === null}
+// 			onClick={handleFinish}
+// 		>
+// 			Finish
+// 		</Button>
+// 	) : (
+// 		<Button
+// 			type="primary"
+// 			size="large"
+// 			disabled={selected === null}
+// 			onClick={handleNext}
+// 		>
+// 			Next
+// 		</Button>
+// 	)}
+// </div>
