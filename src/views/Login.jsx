@@ -63,7 +63,7 @@ const Login = () => {
 								/>
 							</div>
 
-							<Button type="primary" size="large" block className="mt-2">
+							<Button  type="primary" size="large" block className="mt-2">
 								Sign In
 							</Button>
 						</div>
