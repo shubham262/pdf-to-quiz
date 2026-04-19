@@ -1,14 +1,52 @@
 "use client";
-import { Button } from "antd";
+import { generateQuiz } from "@/service/quiz";
+import { Button, message, Spin } from "antd";
+import axios from "axios";
 import { Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 const Landing = () => {
 	const router = useRouter();
+	const [info, setInfo] = useState({
+		loading: false,
+	});
 	const handleGetStarted = useCallback(() => {
 		router.push("/signin");
 	}, [router]);
+
+	const fileToBase64 = (file) => {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = () => {
+				const base64 = reader.result?.split(",")?.[1];
+				resolve(base64);
+			};
+
+			reader.onerror = reject;
+
+			reader.readAsDataURL(file);
+		});
+	};
+
+	const handleFileUpload = useCallback(async (e) => {
+		try {
+			const file = e.target.files?.[0];
+			console.log("file", file);
+			const base64 = await fileToBase64(file);
+			const payload = {
+				file: base64,
+			};
+			setInfo((prev) => ({ ...prev, loading: true }));
+			const response = await generateQuiz(payload);
+
+			console.log("file", response);
+		} catch (error) {
+			message.error("Something went wrong");
+		} finally {
+			setInfo((prev) => ({ ...prev, loading: false }));
+		}
+	}, []);
 	return (
 		<div className="min-h-screen min-w-screen w-full flex items-center justify-center bg-blue-100 px-6 py-12">
 			<div className="max-w-5xl bg-white w-full rounded-3xl  border border-blue-100 p-6 lg:p-12 flex flex-col lg:flex-row gap-10 justify-between lg:items-center">
@@ -55,15 +93,26 @@ const Landing = () => {
 							</p>
 						</div>
 
-						<label
-							className="
+						{info?.loading ? (
+							<div className="mt-6">
+								<Spin size="large" />
+							</div>
+						) : (
+							<label
+								className="
                         mt-6 flex items-center justify-center rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white transiton hover:bg-blue-700 cursor-pointer
                         
                         "
-						>
-							Choose Your PDF
-							<input type="file" accept="application/pdf" className="hidden" />
-						</label>
+							>
+								Choose Your PDF
+								<input
+									type="file"
+									accept="application/pdf"
+									className="hidden"
+									onChange={(e) => handleFileUpload(e)}
+								/>
+							</label>
+						)}
 						<p className="mt-4 text-xs uppercase text-slate-400">
 							PDF Only · Clean Import · Quiz Ready
 						</p>
